@@ -15,6 +15,8 @@ func _ready() -> void:
 	Game.main = self
 	Game.state_changed.connect(_on_state_changed)
 	Game.score_changed.connect(_on_score_changed)
+	Game.paused_changed.connect(_on_paused_changed)
+	_on_paused_changed(Game.paused)
 
 func _process(_delta: float) -> void:
 	if Game.state == Game.State.READY and is_instance_valid(hint):
@@ -23,12 +25,16 @@ func _process(_delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.is_echo():
-		if event.keycode == KEY_ESCAPE or event.keycode == KEY_BACKSPACE:
+		if event.keycode == KEY_ESCAPE:
 			Game.quit()
+		elif event.keycode == KEY_BACKSPACE:
+			Game.toggle_pause()
 	if event.is_action_pressed("mute") and not event.is_echo():
 		Game.toggle_mute()
 
 func _unhandled_input(event: InputEvent) -> void:
+	if Game.paused:
+		return
 	if not _is_tap_action(event):
 		return
 	match Game.state:
@@ -37,6 +43,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			pipes.start()
 		Game.State.OVER:
 			Game.reset()
+
+func _on_paused_changed(_paused: bool) -> void:
+	$HUD/PauseOverlay.visible = _paused
 
 func _is_tap_action(event: InputEvent) -> bool:
 	if event is InputEventScreenTouch:

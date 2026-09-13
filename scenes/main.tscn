@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://c2snpnl1h28qg"]
+[gd_scene load_steps=13 format=3 uid="uid://c2snpnl1h28qg"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="2_player"]
@@ -10,6 +10,7 @@
 [ext_resource type="LabelSettings" path="res://resources/font_title.tres" id="8_font_title"]
 [ext_resource type="LabelSettings" path="res://resources/font_hud.tres" id="9_font_hud"]
 [ext_resource type="Script" path="res://scripts/mute_button.gd" id="10_mute"]
+[ext_resource type="Script" path="res://scripts/pause_overlay.gd" id="11_pause"]
 
 [sub_resource type="CircleShape2D" id="player_circle"]
 radius = 30.0
@@ -18,6 +19,7 @@ radius = 30.0
 size = Vector2(720, 30)
 
 [node name="Main" type="Node2D"]
+process_mode = 3
 script = ExtResource("1_main")
 
 [node name="Background" type="Node2D" parent="."]
@@ -54,6 +56,7 @@ position = Vector2(0, 1180)
 script = ExtResource("5_ground")
 
 [node name="HUD" type="CanvasLayer" parent="."]
+process_mode = 3
 
 [node name="ScoreLabel" type="Label" parent="HUD"]
 anchors_preset = 10
@@ -102,4 +105,73 @@ offset_bottom = 1040.0
 mouse_filter = 2
 text = "TAP TO START"
 label_settings = ExtResource("9_font_hud")
+horizontal_alignment = 1
+
+[node name="PauseOverlay" type="Control" parent="HUD"]
+visible = false
+process_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("11_pause")
+
+[node name="Shade" type="ColorRect" parent="HUD/PauseOverlay"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(0, 0, 0, 0.45)
+
+[node name="Panel" type="Panel" parent="HUD/PauseOverlay"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -180.0
+offset_right = 260.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="HUD/PauseOverlay/Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 30
+
+[node name="VBox" type="VBoxContainer" parent="HUD/PauseOverlay/Panel/Margin"]
+layout_mode = 2
+theme = ExtResource("6_theme")
+alignment = 1
+theme_override_constants/separation = 24
+
+[node name="Title" type="Label" parent="HUD/PauseOverlay/Panel/Margin/VBox"]
+layout_mode = 2
+text = "PAUSED"
+label_settings = ExtResource("8_font_title")
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="HUD/PauseOverlay/Panel/Margin/VBox"]
+custom_minimum_size = Vector2(264, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+text = "RESUME"
+
+[node name="Hint" type="Label" parent="HUD/PauseOverlay/Panel/Margin/VBox"]
+layout_mode = 2
+text = "or tap anywhere"
+label_settings = ExtResource("9_font_hud")
+theme_override_colors/font_color = Color(1, 1, 1, 0.6)
 horizontal_alignment = 1

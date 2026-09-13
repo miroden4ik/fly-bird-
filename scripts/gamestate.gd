@@ -3,6 +3,7 @@ extends Node
 signal state_changed(state: int)
 signal score_changed(score: int)
 signal muted_changed(muted: bool)
+signal paused_changed(paused: bool)
 
 enum State { READY, PLAYING, OVER }
 enum Sfx { SCORE, GAME_OVER, JUMP, HIT }
@@ -19,6 +20,7 @@ var best: int = 0
 var is_new_best: bool = false
 var muted: bool = false
 var scroll_x: float = 0.0
+var paused: bool = false
 
 var sounds: Array[AudioStream] = [
 	load("res://assets/220173__gameaudio__spacey-1uppower-up.wav"), # Spacey 1up by GameAudio (CC0)
@@ -32,10 +34,24 @@ func _ready() -> void:
 	best = _load_best()
 	muted = _load_muted()
 
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_WM_GO_BACK_REQUEST:
+			# Системная кнопка «Назад» на Android.
+			if paused:
+				set_paused(false)
+			else:
+				quit()
+		NOTIFICATION_WM_WINDOW_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED:
+			# Автопауза при сворачивании — игра не «умирает» в фоне.
+			if state == State.PLAYING:
+				set_paused(true)
+
 func start_game() -> void:
 	score = 0
 	scroll_x = 0.0
 	is_new_best = false
+	set_paused(false)
 	set_state(State.PLAYING)
 
 func set_state(new_state: int) -> void:
@@ -50,6 +66,7 @@ func add_score() -> void:
 func game_over() -> void:
 	if state == State.OVER:
 		return
+	set_paused(false)
 	is_new_best = score > 0 and score > best
 	best = maxi(best, score)
 	_save_best()
@@ -67,10 +84,23 @@ func reset() -> void:
 	scroll_x = 0.0
 	is_new_best = false
 	state = State.READY
+	set_paused(false)
 	get_tree().reload_current_scene()
 
 func quit() -> void:
 	get_tree().quit()
+
+func toggle_pause() -> void:
+	if state != State.PLAYING:
+		return
+	set_paused(not paused)
+
+func set_paused(value: bool) -> void:
+	if paused == value:
+		return
+	paused = value
+	get_tree().paused = value
+	paused_changed.emit(paused)
 
 func toggle_mute() -> void:
 	set_muted(not muted)
