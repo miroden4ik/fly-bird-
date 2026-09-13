@@ -1,0 +1,135 @@
+[gd_scene load_steps=8 format=3 uid="uid://bw81icbq38fp8"]
+
+[ext_resource type="Script" path="res://scripts/game_over.gd" id="1_go"]
+[ext_resource type="Theme" path="res://resources/ui_theme.tres" id="2_theme"]
+[ext_resource type="LabelSettings" path="res://resources/font_title.tres" id="3_title"]
+[ext_resource type="LabelSettings" path="res://resources/font_hud.tres" id="4_hud"]
+
+[sub_resource type="StyleBoxFlat" id="panel_sb"]
+bg_color = Color(0.08, 0.46, 0.56, 0.95)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.045, 0.3, 0.36, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 14
+shadow_offset = Vector2(0, 6)
+
+[node name="GameOver" type="Control"]
+process_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_go")
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -310.0
+offset_top = -255.0
+offset_right = 310.0
+offset_bottom = 255.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("panel_sb")
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 42
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 42
+theme_override_constants/margin_bottom = 30
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme = ExtResource("2_theme")
+alignment = 1
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+text = "GAME OVER"
+label_settings = ExtResource("3_title")
+horizontal_alignment = 1
+
+[node name="NewBest" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+text = "NEW BEST!"
+label_settings = ExtResource("4_hud")
+theme_override_colors/font_color = Color(1, 0.85, 0.29, 1)
+horizontal_alignment = 1
+
+[node name="Spacer1" type="Control" parent="Panel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="ScoreRow" type="HBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 18
+
+[node name="ScoreCap" type="Label" parent="Panel/Margin/VBox/ScoreRow"]
+layout_mode = 2
+text = "SCORE"
+label_settings = ExtResource("4_hud")
+theme_override_colors/font_color = Color(1, 1, 1, 0.82)
+vertical_alignment = 1
+
+[node name="ScoreValue" type="Label" parent="Panel/Margin/VBox/ScoreRow"]
+layout_mode = 2
+text = "0"
+label_settings = ExtResource("4_hud")
+theme_override_colors/font_color = Color(1, 0.85, 0.29, 1)
+vertical_alignment = 1
+
+[node name="BestRow" type="HBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 18
+
+[node name="BestCap" type="Label" parent="Panel/Margin/VBox/BestRow"]
+layout_mode = 2
+text = "BEST"
+label_settings = ExtResource("4_hud")
+theme_override_colors/font_color = Color(1, 1, 1, 0.82)
+vertical_alignment = 1
+
+[node name="BestValue" type="Label" parent="Panel/Margin/VBox/BestRow"]
+layout_mode = 2
+text = "0"
+label_settings = ExtResource("4_hud")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+vertical_alignment = 1
+
+[node name="Spacer2" type="Control" parent="Panel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="PlayButton" type="Button" parent="Panel/Margin/VBox"]
+custom_minimum_size = Vector2(264, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+text = "PLAY AGAIN"
+
+[node name="SmallHint" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+text = "or tap anywhere"
+label_settings = ExtResource("4_hud")
+theme_override_colors/font_color = Color(1, 1, 1, 0.6)
+horizontal_alignment = 1

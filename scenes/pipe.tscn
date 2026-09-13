@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://b0b0nhdc04jsn"]
+
+[ext_resource type="Script" path="res://scripts/pipe.gd" id="1_pipe"]
+
+[sub_resource type="RectangleShape2D" id="body_shape"]
+size = Vector2(100, 600)
+
+[sub_resource type="RectangleShape2D" id="score_shape"]
+size = Vector2(1, 1280)
+
+[node name="Pipe" type="Node2D"]
+physics_interpolation_mode = 1
+z_index = 5
+script = ExtResource("1_pipe")
+
+[node name="Top" type="StaticBody2D" parent="."]
+
+[node name="Shape" type="CollisionShape2D" parent="Top"]
+shape = SubResource("body_shape")
+
+[node name="Bottom" type="StaticBody2D" parent="."]
+
+[node name="Shape" type="CollisionShape2D" parent="Bottom"]
+shape = SubResource("body_shape")
+
+[node name="ScoreArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="Shape" type="CollisionShape2D" parent="ScoreArea"]
+shape = SubResource("score_shape")

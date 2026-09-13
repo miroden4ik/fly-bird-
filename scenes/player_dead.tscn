@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://xgyptso1r0p7"]
+
+[ext_resource type="Script" path="res://scripts/player_dead.gd" id="1_dead"]
+
+[sub_resource type="CircleShape2D" id="dead_circle"]
+radius = 30.0
+
+[node name="PlayerDead" type="RigidBody2D"]
+z_index = 8
+physics_interpolation_mode = 1
+collision_layer = 4
+collision_mask = 1
+can_sleep = false
+script = ExtResource("1_dead")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("dead_circle")
